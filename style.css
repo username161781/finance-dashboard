@@ -1,0 +1,725 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: #f8fafc;
+  color: #1e293b;
+  line-height: 1.5;
+}
+
+.header {
+  background: white;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.header-controls {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.dropdown {
+  position: relative;
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.date-picker {
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.export-btn {
+  background: #ea580c;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.main-content {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 350px;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.card-menu {
+  background: none;
+  border: none;
+  color: #9ca3af;
+  cursor: pointer;
+  padding: 0.25rem;
+}
+
+.amount {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.income-amount {
+  color: #1e293b;
+}
+
+.expense-amount {
+  color: #1e293b;
+}
+
+.change {
+  font-size: 0.875rem;
+  color: #10b981;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.my-card {
+  background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.card-chip {
+  width: 32px;
+  height: 24px;
+  background: #fbbf24;
+  border-radius: 4px;
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.card-chip::after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  background: #92400e;
+  border-radius: 2px;
+}
+
+.card-number {
+  font-size: 1.25rem;
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+  font-family: "Courier New", monospace;
+}
+
+.card-holder {
+  font-size: 0.875rem;
+  opacity: 0.9;
+}
+
+.card-logo {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  display: flex;
+  gap: -8px;
+}
+
+.card-logo-circle {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+}
+
+.logo-red {
+  background: #ef4444;
+}
+
+.logo-orange {
+  background: #f59e0b;
+  margin-left: -8px;
+}
+
+.spending-section {
+  margin-top: 2rem;
+}
+
+.spending-limit {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.spending-used {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-bottom: 0.5rem;
+}
+
+.progress-bar {
+  height: 6px;
+  background: #f3f4f6;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #ea580c;
+  width: 37%;
+  border-radius: 3px;
+}
+
+/* ===== ОБНОВЛЕННЫЕ СТИЛИ ДЛЯ ГРАФИКОВ ===== */
+/* ===== ОБНОВЛЕННЫЕ СТИЛИ ДЛЯ ГРАФИКОВ ===== */
+.chart-section {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem; /* Это расстояние между Overview и Recent Transactions */
+}
+
+/* Контейнер для графика */
+.chart-container {
+  height: 360px; /* Увеличил высоту с 280px до 300px */
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  padding: 3rem 1rem 0.75rem 1rem; /* Увеличил верхний отступ */
+  background: #f8fafc;
+  border-radius: 8px;
+  margin-top: 1rem; /* ТАКОЕ ЖЕ РАССТОЯНИЕ как между белыми блоками */
+  margin-bottom: 0px;
+  gap: 2px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Индивидуальная обертка для столбца */
+.chart-bar-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+  max-width: 60px;
+}
+
+/* Контейнер для столбца */
+.chart-bar-container {
+  width: 40px;
+  position: relative;
+  margin-bottom: 12px; /* Увеличил отступ для подписей */
+  background-color: #f1f5f9;
+  border-radius: 0;
+  max-height: 180px;
+  height: auto;
+}
+
+/* Подпись месяца */
+.chart-label {
+  font-size: 0.75rem;
+  color: #6b7280;
+  text-align: center;
+  width: 100%;
+  margin-top: 4px;
+  margin-bottom: 0;
+  line-height: 1.2;
+}
+
+/* Текущий месяц */
+.chart-label.current-month {
+  color: #3b82f6;
+  font-weight: 600;
+}
+
+/* Скрываем старый контейнер для подписей */
+.chart-labels {
+  display: none;
+}
+/* ===== СТИЛИ ДЛЯ ALL EXPENSES ===== */
+.expenses-breakdown {
+  margin-top: 0.5rem;
+}
+
+.total-expenses {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.period-tabs {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.875rem;
+}
+
+.period-tab {
+  color: #6b7280;
+  cursor: pointer;
+}
+
+.period-tab.active {
+  color: #1e293b;
+  font-weight: 600;
+}
+
+.period-amounts {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.period-values {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.color-bar {
+  height: 4px;
+  border-radius: 3px;
+  background: linear-gradient(to right, #ea580c, #f59e0b, #eab308, #10b981);
+  margin-bottom: 0.75rem;
+}
+
+.expense-categories {
+  list-style: none;
+}
+
+.expense-category {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.category-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.category-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.dot-food {
+  background: #ea580c;
+}
+.dot-entertainment {
+  background: #f59e0b;
+}
+.dot-shopping {
+  background: #eab308;
+}
+.dot-investment {
+  background: #10b981;
+}
+
+/* ===== СТИЛИ ДЛЯ ТРАНЗАКЦИЙ ===== */
+.transactions-section {
+  grid-column: 1 / -1;
+  margin-top: 0;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.filters {
+  display: flex;
+  gap: 1rem;
+}
+
+.filter-btn {
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.transactions-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.transactions-table th {
+  text-align: left;
+  padding: 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #6b7280;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.transactions-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.status-success {
+  background: #dcfce7;
+  color: #16a34a;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.action-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+  background-color: #f3f4f6;
+}
+
+.action-btn i.fa-edit {
+  color: #3b82f6;
+}
+
+.action-btn i.fa-trash {
+  color: #ef4444;
+}
+
+/* ===== МОДАЛЬНЫЕ ОКНА ===== */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 12px;
+  width: 500px;
+  max-width: 90vw;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: slideIn 0.3s ease;
+}
+
+.modal-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 0.25rem;
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.form-select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: white;
+  transition: all 0.2s ease;
+}
+
+.form-select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.modal-footer {
+  padding: 1.5rem;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  background: #3b82f6;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #2563eb;
+}
+
+.btn-secondary {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.btn-secondary:hover {
+  background: #e5e7eb;
+}
+
+/* ===== КНОПКИ ДОБАВЛЕНИЯ ===== */
+.add-buttons {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.fab {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease;
+}
+
+.fab:hover {
+  transform: scale(1.1);
+}
+
+.fab-income {
+  background: #10b981;
+}
+
+.fab-expense {
+  background: #ef4444;
+}
+
+/* ===== АНИМАЦИИ ===== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translate(-50%, -60%);
+    opacity: 0;
+  }
+  to {
+    transform: translate(-50%, -50%);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== ДОПОЛНИТЕЛЬНЫЕ СТИЛИ ===== */
+.filter-info, .sort-badge {
+  transition: all 0.3s ease;
+}
+
+#sortPanel, #filterPanel {
+  animation: slideDown 0.3s ease;
+}
+
+/* ===== МЕДИА-ЗАПРОСЫ ===== */
+@media (max-width: 1200px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .chart-section {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .main-content {
+    padding: 1rem;
+  }
+  
+  .header {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+  
+  .header-controls {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .chart-container {
+    height: 180px;
+  }
+}
