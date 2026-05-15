@@ -9,17 +9,17 @@
 </head>
 <body>
     <div class="header">
-        <h1>Добро пожаловать !</h1>
+        <h1>Добро пожаловать!</h1>
         <div class="header-controls">
             <div class="dropdown">
-                Daily <i class="fas fa-chevron-down"></i>
+                Ежедневно <i class="fas fa-chevron-down"></i>
             </div>
             <div class="date-picker">
                 <i class="fas fa-calendar"></i>
             </div>
             <button class="export-btn">
                 <i class="fas fa-download"></i>
-                Export
+                Экспорт
             </button>
         </div>
     </div>
@@ -28,25 +28,25 @@
         <div class="dashboard-grid">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Monthly Income</h3>
+                    <h3 class="card-title">Доходы за месяц</h3>
                     <button class="card-menu"><i class="fas fa-ellipsis-h"></i></button>
                 </div>
-                <div class="amount income-amount">$0.00</div>
+                <div class="amount income-amount">0.00</div>
                 <div class="change">
                     <i class="fas fa-arrow-up"></i>
-                    0% vs Last month
+                    0% vs Прошлый месяц
                 </div>
             </div>
 
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Monthly Expenses</h3>
+                    <h3 class="card-title">Расходы за месяц</h3>
                     <button class="card-menu"><i class="fas fa-ellipsis-h"></i></button>
                 </div>
-                <div class="amount expense-amount">$0.00</div>
+                <div class="amount expense-amount">0.00</div>
                 <div class="change">
                     <i class="fas fa-arrow-up"></i>
-                    0% vs Last month
+                    0% vs Прошлый месяц
                 </div>
             </div>
         </div>
@@ -54,12 +54,12 @@
         <div class="chart-section">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Overview</h3>
+                    <h3 class="card-title">Диаграмма доходов и расходов</h3>
                     <div style="display: flex; gap: 1rem;">
-                        <div class="dropdown">Yearly <i class="fas fa-chevron-down"></i></div>
+                        <div class="dropdown">Ежегодно <i class="fas fa-chevron-down"></i></div>
                         <button class="filter-btn">
                             <i class="fas fa-filter"></i>
-                            Filter
+                            Фильтр
                         </button>
                     </div>
                 </div>
@@ -72,30 +72,24 @@
 
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">All Expenses</h3>
+                    <h3 class="card-title">Все расходы</h3>
                     <button class="card-menu"><i class="fas fa-ellipsis-h"></i></button>
                 </div>
-                <div style="font-size: 0.75rem; color: #6b7280; margin-bottom: 1rem;">Spending breakdown by category</div>
+                <div style="font-size: 0.75rem; color: #6b7280; margin-bottom: 1rem;">Расходы по категориям</div>
                 
                 <div class="expenses-breakdown">
-                    <div class="total-expenses">$0.00</div>
-                    
-                    <div class="period-tabs">
-                        <span class="period-tab">Daily</span>
-                        <span class="period-tab">Weekly</span>
-                        <span class="period-tab active">Monthly</span>
-                    </div>
+                    <div class="total-expenses">0.00</div>
                     
                     <div class="period-amounts">
-                        <span>Daily</span>
-                        <span>Weekly</span>
-                        <span>Monthly</span>
+                        <span>Ежедневно</span>
+                        <span>Еженедельно</span>
+                        <span>Ежемесячно</span>
                     </div>
                     
                     <div class="period-values">
-                        <span>$0</span>
-                        <span>$0</span>
-                        <span>$0</span>
+                        <span>0</span>
+                        <span>0</span>
+                        <span>0</span>
                     </div>
                     
                     <div class="color-bar"></div>
@@ -104,35 +98,35 @@
                         <li class="expense-category">
                             <div class="category-info">
                                 <div class="category-dot dot-food"></div>
-                                <span>Food & Health</span>
+                                <span>Еда и Здоровье</span>
                             </div>
                             <span class="category-amount-food">0</span>
                         </li>
                         <li class="expense-category">
                             <div class="category-info">
                                 <div class="category-dot dot-entertainment"></div>
-                                <span>Entertainments</span>
+                                <span>Развлечения</span>
                             </div>
                             <span class="category-amount-entertainment">0</span>
                         </li>
                         <li class="expense-category">
                             <div class="category-info">
                                 <div class="category-dot dot-shopping"></div>
-                                <span>Shopping</span>
+                                <span>Шоппинг</span>
                             </div>
                             <span class="category-amount-shopping">0</span>
                         </li>
                         <li class="expense-category">
                             <div class="category-info">
                                 <div class="category-dot dot-investment"></div>
-                                <span>Investment</span>
+                                <span>Инвестиции</span>
                             </div>
                             <span class="category-amount-investment">0</span>
                         </li>
                         <li class="expense-category">
                             <div class="category-info">
                                 <div class="category-dot dot-other" style="background-color: #94a3b8;"></div>
-                                <span>Other</span>
+                                <span>Другое</span>
                             </div>
                             <span class="category-amount-other">0</span>
                         </li>
@@ -143,15 +137,15 @@
 
         <div class="card transactions-section">
             <div class="card-header">
-                <h3 class="card-title">Recent Transactions</h3>
+                <h3 class="card-title">Недавние транзакции</h3>
                 <div class="filters">
                     <button class="filter-btn">
                         <i class="fas fa-sort"></i>
-                        Sort
+                        Сортировать
                     </button>
                     <button class="filter-btn">
                         <i class="fas fa-filter"></i>
-                        Filter
+                        Фильтровать
                     </button>
                 </div>
             </div>
@@ -159,12 +153,12 @@
             <table class="transactions-table">
                 <thead>
                     <tr>
-                        <th>Date <i class="fas fa-sort"></i></th>
-                        <th>Category <i class="fas fa-sort"></i></th>
-                        <th>Description</th>
-                        <th>Amount <i class="fas fa-sort"></i></th>
-                        <th>Status</th>
-                        <th>Action</th>
+                        <th>Дата <i class="fas fa-sort"></i></th>
+                        <th>Категория <i class="fas fa-sort"></i></th>
+                        <th>Описание</th>
+                        <th>Сумма <i class="fas fa-sort"></i></th>
+                        <th>Статус</th>
+                        <th>Действие</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -185,39 +179,39 @@
     <div id="incomeModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title">Add Income</h2>
+                <h2 class="modal-title">Добавить доходы</h2>
                 <button class="close-btn" onclick="window.app.uiManager.closeModal('incomeModal')">&times;</button>
             </div>
             <div class="modal-body">
                 <form id="incomeForm">
                     <div class="form-group">
-                        <label class="form-label">Amount ($)</label>
-                        <input type="number" class="form-input" id="incomeAmount" placeholder="Enter amount" required>
+                        <label class="form-label">Сумма</label>
+                        <input type="number" class="form-input" id="incomeAmount" placeholder="Введите сумму" required>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Category</label>
+                        <label class="form-label">Категория</label>
                         <select class="form-select" id="incomeCategory" required>
-                            <option value="">Select category</option>
-                            <option value="salary">Salary</option>
-                            <option value="freelance">Freelance</option>
-                            <option value="business">Business</option>
-                            <option value="investment">Investment</option>
-                            <option value="other">Other</option>
+                            <option value="">Выбрать категорию</option>
+                            <option value="salary">Зарплата</option>
+                            <option value="freelance">Фриланс</option>
+                            <option value="business">Бизнес</option>
+                            <option value="investment">Инвестиции</option>
+                            <option value="other">Другое</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Description (Name)</label>
-                        <input type="text" class="form-input" id="incomeDescription" placeholder="e.g., Monthly salary, Freelance project" required>
+                        <label class="form-label">Описание</label>
+                        <input type="text" class="form-input" id="incomeDescription" placeholder="к примеру: Зарплата, Фриланс проект" required>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Date</label>
+                        <label class="form-label">Дата</label>
                         <input type="date" class="form-input" id="incomeDate" required>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="window.app.uiManager.closeModal('incomeModal')">Cancel</button>
-                <button class="btn btn-primary" onclick="window.app.uiManager.addIncome()">Add Income</button>
+                <button class="btn btn-secondary" onclick="window.app.uiManager.closeModal('incomeModal')">Отменить</button>
+                <button class="btn btn-primary" onclick="window.app.uiManager.addIncome()">Добавить доходы</button>
             </div>
         </div>
     </div>
@@ -225,41 +219,41 @@
     <div id="expenseModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title">Add Expense</h2>
+                <h2 class="modal-title">Добавить расходы</h2>
                 <button class="close-btn" onclick="window.app.uiManager.closeModal('expenseModal')">&times;</button>
             </div>
             <div class="modal-body">
                 <form id="expenseForm">
                     <div class="form-group">
-                        <label class="form-label">Amount ($)</label>
-                        <input type="number" class="form-input" id="expenseAmount" placeholder="Enter amount" required>
+                        <label class="form-label">Сумма</label>
+                        <input type="number" class="form-input" id="expenseAmount" placeholder="Введите сумму" required>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Category</label>
+                        <label class="form-label">Категория</label>
                         <select class="form-select" id="expenseCategory" required>
-                            <option value="">Select category</option>
-                            <option value="food">Food & Health</option>
-                            <option value="entertainment">Entertainment</option>
-                            <option value="shopping">Shopping</option>
-                            <option value="investment">Investment</option>
-                            <option value="transport">Transport</option>
-                            <option value="utilities">Utilities</option>
-                            <option value="other">Other</option>
+                            <option value="">Выберете категорию</option>
+                            <option value="food">Еда и Здоровье</option>
+                            <option value="entertainment">Развлечения</option>
+                            <option value="shopping">Шоппинг</option>
+                            <option value="investment">Инвестиции</option>
+                            <option value="transport">Транспорт</option>
+                            <option value="utilities">Коммунальныеу слуги</option>
+                            <option value="other">Другое</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Description (Name)</label>
-                        <input type="text" class="form-input" id="expenseDescription" placeholder="e.g., Groceries, Netflix, Dinner" required>
+                        <label class="form-label">Описание</label>
+                        <input type="text" class="form-input" id="expenseDescription" placeholder="к примеру: Ужин, Продуктовый магазин" required>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Date</label>
+                        <label class="form-label">Дата</label>
                         <input type="date" class="form-input" id="expenseDate" required>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="window.app.uiManager.closeModal('expenseModal')">Cancel</button>
-                <button class="btn btn-primary" onclick="window.app.uiManager.addExpense()">Add Expense</button>
+                <button class="btn btn-secondary" onclick="window.app.uiManager.closeModal('expenseModal')">Отменить</button>
+                <button class="btn btn-primary" onclick="window.app.uiManager.addExpense()">Лобавить расходы</button>
             </div>
         </div>
     </div>
