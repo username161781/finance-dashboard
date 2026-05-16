@@ -18,6 +18,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .header h1 {
@@ -30,6 +31,7 @@ body {
   display: flex;
   gap: 1rem;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .dropdown {
@@ -91,6 +93,8 @@ body {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
 .card-title {
@@ -221,34 +225,31 @@ body {
   border-radius: 3px;
 }
 
-/* ===== ОБНОВЛЕННЫЕ СТИЛИ ДЛЯ ГРАФИКОВ ===== */
-/* ===== ОБНОВЛЕННЫЕ СТИЛИ ДЛЯ ГРАФИКОВ ===== */
 .chart-section {
   grid-column: 1 / -1;
   display: grid;
   grid-template-columns: 2fr 1fr;
   gap: 1.5rem;
-  margin-bottom: 1.5rem; /* Это расстояние между Overview и Recent Transactions */
+  margin-bottom: 1.5rem;
 }
 
-/* Контейнер для графика */
 .chart-container {
-  height: 360px; /* Увеличил высоту с 280px до 300px */
+  height: 360px;
   position: relative;
   display: flex;
   align-items: flex-end;
   justify-content: space-around;
-  padding: 3rem 1rem 0.75rem 1rem; /* Увеличил верхний отступ */
+  padding: 3rem 1rem 0.75rem 1rem;
   background: #f8fafc;
   border-radius: 8px;
-  margin-top: 1rem; /* ТАКОЕ ЖЕ РАССТОЯНИЕ как между белыми блоками */
+  margin-top: 1rem;
   margin-bottom: 0px;
   gap: 2px;
   width: 100%;
   box-sizing: border-box;
+  overflow-x: auto;
 }
 
-/* Индивидуальная обертка для столбца */
 .chart-bar-wrapper {
   flex: 1;
   display: flex;
@@ -257,20 +258,20 @@ body {
   justify-content: flex-end;
   height: 100%;
   max-width: 60px;
+  min-width: 40px;
 }
 
-/* Контейнер для столбца */
 .chart-bar-container {
-  width: 40px;
+  width: 100%;
+  max-width: 40px;
   position: relative;
-  margin-bottom: 12px; /* Увеличил отступ для подписей */
+  margin-bottom: 12px;
   background-color: #f1f5f9;
   border-radius: 0;
   max-height: 180px;
   height: auto;
 }
 
-/* Подпись месяца */
 .chart-label {
   font-size: 0.75rem;
   color: #6b7280;
@@ -281,17 +282,15 @@ body {
   line-height: 1.2;
 }
 
-/* Текущий месяц */
 .chart-label.current-month {
   color: #3b82f6;
   font-weight: 600;
 }
 
-/* Скрываем старый контейнер для подписей */
 .chart-labels {
   display: none;
 }
-/* ===== СТИЛИ ДЛЯ ALL EXPENSES ===== */
+
 .expenses-breakdown {
   margin-top: 0.5rem;
 }
@@ -379,7 +378,6 @@ body {
   background: #10b981;
 }
 
-/* ===== СТИЛИ ДЛЯ ТРАНЗАКЦИЙ ===== */
 .transactions-section {
   grid-column: 1 / -1;
   margin-top: 0;
@@ -390,6 +388,8 @@ body {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
 .filters {
@@ -413,6 +413,8 @@ body {
   width: 100%;
   border-collapse: collapse;
   margin-top: 1rem;
+  display: table;
+  overflow-x: auto;
 }
 
 .transactions-table th {
@@ -436,6 +438,7 @@ body {
   border-radius: 12px;
   font-size: 0.75rem;
   font-weight: 600;
+  display: inline-block;
 }
 
 .action-btn {
@@ -459,7 +462,6 @@ body {
   color: #ef4444;
 }
 
-/* ===== МОДАЛЬНЫЕ ОКНА ===== */
 .modal {
   display: none;
   position: fixed;
@@ -588,7 +590,6 @@ body {
   background: #e5e7eb;
 }
 
-/* ===== КНОПКИ ДОБАВЛЕНИЯ ===== */
 .add-buttons {
   position: fixed;
   bottom: 2rem;
@@ -625,7 +626,6 @@ body {
   background: #ef4444;
 }
 
-/* ===== АНИМАЦИИ ===== */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -679,7 +679,6 @@ body {
   }
 }
 
-/* ===== ДОПОЛНИТЕЛЬНЫЕ СТИЛИ ===== */
 .filter-info, .sort-badge {
   transition: all 0.3s ease;
 }
@@ -688,30 +687,27 @@ body {
   animation: slideDown 0.3s ease;
 }
 
-/* ===== МЕДИА-ЗАПРОСЫ ===== */
-@media (max-width: 1200px) {
-  .dashboard-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .chart-section {
-    grid-template-columns: 1fr;
-  }
-}
-
+/* ===== МЕДИА-ЗАПРОСЫ ДЛЯ ТЕЛЕФОНА ===== */
 @media (max-width: 768px) {
-  .dashboard-grid {
-    grid-template-columns: 1fr;
-  }
-
   .main-content {
     padding: 1rem;
+  }
+  
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .chart-section {
+    grid-template-columns: 1fr;
+    gap: 1rem;
   }
   
   .header {
     flex-direction: column;
     gap: 1rem;
     text-align: center;
+    padding: 1rem;
   }
   
   .header-controls {
@@ -720,6 +716,133 @@ body {
   }
   
   .chart-container {
-    height: 180px;
+    height: auto;
+    min-height: 250px;
+    overflow-x: auto;
+    justify-content: flex-start;
+    gap: 0.5rem;
+    padding: 2rem 0.5rem 0.5rem 0.5rem;
+  }
+  
+  .chart-bar-wrapper {
+    min-width: 35px;
+    max-width: 45px;
+  }
+  
+  .chart-bar-container {
+    width: 25px;
+    max-width: 30px;
+  }
+  
+  .chart-label {
+    font-size: 0.7rem;
+  }
+  
+  .transactions-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  
+  .transactions-table th,
+  .transactions-table td {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.75rem;
+  }
+  
+  .card-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .filters {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  
+  .filter-btn {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.75rem;
+  }
+  
+  .add-buttons {
+    bottom: 1rem;
+    right: 1rem;
+  }
+  
+  .fab {
+    width: 48px;
+    height: 48px;
+    font-size: 1.25rem;
+  }
+  
+  .period-amounts,
+  .period-values {
+    font-size: 0.75rem;
+  }
+  
+  .total-expenses {
+    font-size: 1.25rem;
+  }
+  
+  .expense-category span {
+    font-size: 0.875rem;
+  }
+  
+  .modal-content {
+    width: 95vw;
+  }
+  
+  .modal-title {
+    font-size: 1rem;
+  }
+  
+  .form-label {
+    font-size: 0.875rem;
+  }
+  
+  .form-input,
+  .form-select {
+    padding: 0.6rem;
+    font-size: 0.875rem;
+  }
+  
+  .btn {
+    padding: 0.6rem 1rem;
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .chart-bar-wrapper {
+    min-width: 30px;
+  }
+  
+  .chart-bar-container {
+    width: 20px;
+  }
+  
+  .transactions-table th,
+  .transactions-table td {
+    padding: 0.5rem 0.35rem;
+    font-size: 0.7rem;
+  }
+  
+  .status-success {
+    padding: 0.15rem 0.5rem;
+    font-size: 0.65rem;
+  }
+  
+  .action-btn {
+    padding: 0.15rem 0.3rem;
+  }
+  
+  .period-amounts,
+  .period-values {
+    font-size: 0.7rem;
+  }
+  
+  .expense-category span {
+    font-size: 0.8rem;
   }
 }

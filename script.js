@@ -8,14 +8,23 @@ class Transaction {
         this.category = this._formatCategory(category, type);
         this.description = description;
         this.date = date;
-        this.status = "Success";
+        this.status = "Успешно";
         this.type = type;
     }
 
     _formatCategory(category, type) {
         if (type === 'expense' && category === 'food') {
-            return 'Food & Health';
+            return 'Еда и здоровье';
         }
+        if (category === 'salary') return 'Зарплата';
+        if (category === 'freelance') return 'Фриланс';
+        if (category === 'business') return 'Бизнес';
+        if (category === 'investment') return 'Инвестиции';
+        if (category === 'entertainment') return 'Развлечения';
+        if (category === 'shopping') return 'Покупки';
+        if (category === 'transport') return 'Транспорт';
+        if (category === 'utilities') return 'Коммунальные услуги';
+        if (category === 'other') return 'Другое';
         return category.charAt(0).toUpperCase() + category.slice(1);
     }
 
@@ -40,9 +49,21 @@ class Transaction {
     }
 
     static fromJSON(data) {
+        let category = data.category;
+        if (category === 'Food & Health') category = 'Еда и здоровье';
+        if (category === 'Salary') category = 'Зарплата';
+        if (category === 'Freelance') category = 'Фриланс';
+        if (category === 'Business') category = 'Бизнес';
+        if (category === 'Investment') category = 'Инвестиции';
+        if (category === 'Entertainment') category = 'Развлечения';
+        if (category === 'Shopping') category = 'Покупки';
+        if (category === 'Transport') category = 'Транспорт';
+        if (category === 'Utilities') category = 'Коммунальные услуги';
+        if (category === 'Other') category = 'Другое';
+        
         const t = new Transaction(
             Math.abs(data.amount),
-            data.category === 'Food & Health' ? 'food' : data.category.toLowerCase(),
+            category === 'Еда и здоровье' ? 'food' : category.toLowerCase(),
             data.description,
             data.date,
             data.amount > 0 ? 'income' : 'expense'
@@ -59,7 +80,7 @@ class Transaction {
 class StorageService {
     constructor(storageKey = 'finance_transactions') {
         this.storageKey = storageKey;
-        this.apiEndpoint = 'https://api.jsonbin.io/v3/b/'; // Пример API для облачного хранения
+        this.apiEndpoint = 'https://api.jsonbin.io/v3/b/';
     }
 
     loadTransactions() {
@@ -74,14 +95,11 @@ class StorageService {
     saveTransactions(transactions) {
         const data = transactions.map(t => t.toJSON());
         localStorage.setItem(this.storageKey, JSON.stringify(data));
-        
-        // Асинхронное сохранение в облако через API
         this._syncToCloud(data).catch(console.warn);
     }
 
     async _syncToCloud(data) {
         try {
-            // Пример интеграции с внешним API (JSONBin.io)
             const response = await fetch(this.apiEndpoint + 'YOUR_BIN_ID', {
                 method: 'PUT',
                 headers: {
@@ -215,8 +233,8 @@ class TransactionManager {
     }
 
     getMonthlyData() {
-        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                       'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const months = ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн',
+                       'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'];
         
         const currentDate = new Date();
         const currentYear = currentDate.getFullYear();
@@ -281,13 +299,13 @@ class TransactionManager {
                 const category = t.category.toLowerCase();
                 const amount = t.getAbsoluteAmount();
 
-                if (category.includes('food') || category === 'food & health') {
+                if (category.includes('еда') || category === 'еда и здоровье') {
                     categoryTotals.food += amount;
-                } else if (category.includes('entertainment')) {
+                } else if (category.includes('развлечен')) {
                     categoryTotals.entertainment += amount;
-                } else if (category.includes('shopping')) {
+                } else if (category.includes('покупк')) {
                     categoryTotals.shopping += amount;
-                } else if (category.includes('investment')) {
+                } else if (category.includes('инвестиц')) {
                     categoryTotals.investment += amount;
                 } else {
                     categoryTotals.other += amount;
@@ -329,7 +347,6 @@ class UIManager {
         this.currentFilter = { type: 'all', category: 'all', search: '' };
         this.editingTransactionId = null;
         
-        // Привязка методов к экземпляру
         this.updateDashboard = this.updateDashboard.bind(this);
         this.updateOverviewChart = this.updateOverviewChart.bind(this);
         this.updateTransactionsTable = this.updateTransactionsTable.bind(this);
@@ -397,11 +414,10 @@ class UIManager {
         if (event.target === editExpenseModal) this.closeModal("editExpenseModal");
     }
 
-    // ===== МЕТОДЫ ДЛЯ РАБОТЫ С ДАТОЙ =====
     setCurrentDate() {
         const today = new Date();
         const options = { day: 'numeric', month: 'long', year: 'numeric' };
-        const formattedDate = today.toLocaleDateString('en-US', options).replace(',', '');
+        const formattedDate = today.toLocaleDateString('ru-RU', options).replace(',', '');
         
         const datePicker = document.querySelector('.date-picker');
         if (datePicker) {
@@ -418,7 +434,6 @@ class UIManager {
         if (expenseDate) expenseDate.value = today;
     }
 
-    // ===== МЕТОДЫ ДЛЯ МОДАЛЬНЫХ ОКОН =====
     openIncomeModal() {
         document.getElementById("incomeModal").style.display = "block";
         document.body.style.overflow = "hidden";
@@ -456,7 +471,6 @@ class UIManager {
         }
     }
 
-    // ===== МЕТОДЫ ДЛЯ ДОБАВЛЕНИЯ ТРАНЗАКЦИЙ =====
     addIncome() {
         const amount = parseFloat(document.getElementById("incomeAmount").value);
         const category = document.getElementById("incomeCategory").value;
@@ -464,7 +478,7 @@ class UIManager {
         const date = document.getElementById("incomeDate").value;
 
         if (!amount || !category || !description || !date) {
-            alert("Please fill in all fields");
+            alert("Пожалуйста, заполните все поля");
             return;
         }
 
@@ -475,7 +489,7 @@ class UIManager {
         this.updateOverviewChart();
         this.updateTransactionsTable();
         this.closeModal("incomeModal");
-        this.showNotification("Income added successfully!", "success");
+        this.showNotification("Доход успешно добавлен!", "success");
     }
 
     addExpense() {
@@ -485,7 +499,7 @@ class UIManager {
         const date = document.getElementById("expenseDate").value;
 
         if (!amount || !category || !description || !date) {
-            alert("Please fill in all fields");
+            alert("Пожалуйста, заполните все поля");
             return;
         }
 
@@ -496,10 +510,9 @@ class UIManager {
         this.updateOverviewChart();
         this.updateTransactionsTable();
         this.closeModal("expenseModal");
-        this.showNotification("Expense added successfully!", "success");
+        this.showNotification("Расход успешно добавлен!", "success");
     }
 
-    // ===== МЕТОДЫ ДЛЯ РЕДАКТИРОВАНИЯ =====
     openEditModal(id) {
         const transaction = this.tm.transactions.find(t => t.id === id);
         if (!transaction) return;
@@ -518,8 +531,15 @@ class UIManager {
             document.getElementById('editIncomeDate').value = transaction.date;
         } else {
             document.getElementById('editExpenseAmount').value = transaction.getAbsoluteAmount();
-            document.getElementById('editExpenseCategory').value = 
-                transaction.category === 'Food & Health' ? 'food' : transaction.category.toLowerCase();
+            let catValue = transaction.category.toLowerCase();
+            if (catValue === 'еда и здоровье') catValue = 'food';
+            if (catValue === 'развлечения') catValue = 'entertainment';
+            if (catValue === 'покупки') catValue = 'shopping';
+            if (catValue === 'транспорт') catValue = 'transport';
+            if (catValue === 'коммунальные услуги') catValue = 'utilities';
+            if (catValue === 'инвестиции') catValue = 'investment';
+            if (catValue === 'другое') catValue = 'other';
+            document.getElementById('editExpenseCategory').value = catValue;
             document.getElementById('editExpenseDescription').value = transaction.description;
             document.getElementById('editExpenseDate').value = transaction.date;
         }
@@ -543,12 +563,17 @@ class UIManager {
             const date = document.getElementById('editIncomeDate').value;
             
             if (!amount || !category || !description || !date) {
-                alert("Please fill in all fields");
+                alert("Пожалуйста, заполните все поля");
                 return;
             }
             
             transaction.amount = amount;
-            transaction.category = category.charAt(0).toUpperCase() + category.slice(1);
+            if (category === 'salary') transaction.category = 'Зарплата';
+            else if (category === 'freelance') transaction.category = 'Фриланс';
+            else if (category === 'business') transaction.category = 'Бизнес';
+            else if (category === 'investment') transaction.category = 'Инвестиции';
+            else if (category === 'other') transaction.category = 'Другое';
+            else transaction.category = category.charAt(0).toUpperCase() + category.slice(1);
             transaction.description = description;
             transaction.date = date;
         } else {
@@ -558,12 +583,19 @@ class UIManager {
             const date = document.getElementById('editExpenseDate').value;
             
             if (!amount || !category || !description || !date) {
-                alert("Please fill in all fields");
+                alert("Пожалуйста, заполните все поля");
                 return;
             }
             
             transaction.amount = -amount;
-            transaction.category = category === 'food' ? 'Food & Health' : category.charAt(0).toUpperCase() + category.slice(1);
+            if (category === 'food') transaction.category = 'Еда и здоровье';
+            else if (category === 'entertainment') transaction.category = 'Развлечения';
+            else if (category === 'shopping') transaction.category = 'Покупки';
+            else if (category === 'transport') transaction.category = 'Транспорт';
+            else if (category === 'utilities') transaction.category = 'Коммунальные услуги';
+            else if (category === 'investment') transaction.category = 'Инвестиции';
+            else if (category === 'other') transaction.category = 'Другое';
+            else transaction.category = category.charAt(0).toUpperCase() + category.slice(1);
             transaction.description = description;
             transaction.date = date;
         }
@@ -573,7 +605,7 @@ class UIManager {
         this.updateOverviewChart();
         this.updateTransactionsTable();
         this.closeModal(isIncome ? 'editIncomeModal' : 'editExpenseModal');
-        this.showNotification('Transaction updated successfully!', 'success');
+        this.showNotification('Транзакция успешно обновлена!', 'success');
         
         this.editingTransactionId = null;
     }
@@ -587,10 +619,14 @@ class UIManager {
         modal.id = modalId;
         modal.className = 'modal';
         
-        const title = isIncome ? 'Edit Income' : 'Edit Expense';
+        const title = isIncome ? 'Редактирование дохода' : 'Редактирование расхода';
         const categories = isIncome 
-            ? ['Salary', 'Freelance', 'Business', 'Investment', 'Other']
-            : ['Food', 'Entertainment', 'Shopping', 'Transport', 'Utilities', 'Investment', 'Other'];
+            ? ['salary', 'freelance', 'business', 'investment', 'other']
+            : ['food', 'entertainment', 'shopping', 'transport', 'utilities', 'investment', 'other'];
+        
+        const categoryNames = isIncome
+            ? ['Зарплата', 'Фриланс', 'Бизнес', 'Инвестиции', 'Другое']
+            : ['Еда и здоровье', 'Развлечения', 'Покупки', 'Транспорт', 'Коммунальные услуги', 'Инвестиции', 'Другое'];
         
         modal.innerHTML = `
             <div class="modal-content">
@@ -601,33 +637,29 @@ class UIManager {
                 <div class="modal-body">
                     <form id="${isIncome ? 'editIncomeForm' : 'editExpenseForm'}">
                         <div class="form-group">
-                            <label class="form-label">Amount ($)</label>
-                            <input type="number" class="form-input" id="${isIncome ? 'editIncomeAmount' : 'editExpenseAmount'}" placeholder="Enter amount" required>
+                            <label class="form-label">Сумма (₽)</label>
+                            <input type="number" class="form-input" id="${isIncome ? 'editIncomeAmount' : 'editExpenseAmount'}" placeholder="Введите сумму" required>
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Category</label>
+                            <label class="form-label">Категория</label>
                             <select class="form-select" id="${isIncome ? 'editIncomeCategory' : 'editExpenseCategory'}" required>
-                                <option value="">Select category</option>
-                                ${categories.map(cat => {
-                                    const value = cat === 'Food' ? 'food' : cat.toLowerCase();
-                                    const text = cat === 'Food' ? 'Food & Health' : cat;
-                                    return `<option value="${value}">${text}</option>`;
-                                }).join('')}
+                                <option value="">Выберите категорию</option>
+                                ${categories.map((cat, idx) => `<option value="${cat}">${categoryNames[idx]}</option>`).join('')}
                             </select>
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Description (Name)</label>
-                            <input type="text" class="form-input" id="${isIncome ? 'editIncomeDescription' : 'editExpenseDescription'}" placeholder="Enter description" required>
+                            <label class="form-label">Описание (название)</label>
+                            <input type="text" class="form-input" id="${isIncome ? 'editIncomeDescription' : 'editExpenseDescription'}" placeholder="Введите описание" required>
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Date</label>
+                            <label class="form-label">Дата</label>
                             <input type="date" class="form-input" id="${isIncome ? 'editIncomeDate' : 'editExpenseDate'}" required>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" onclick="app.uiManager.closeModal('${modalId}')">Cancel</button>
-                    <button class="btn btn-primary" onclick="app.uiManager.saveEdit()">Save Changes</button>
+                    <button class="btn btn-secondary" onclick="app.uiManager.closeModal('${modalId}')">Отмена</button>
+                    <button class="btn btn-primary" onclick="app.uiManager.saveEdit()">Сохранить изменения</button>
                 </div>
             </div>
         `;
@@ -636,26 +668,25 @@ class UIManager {
     }
 
     deleteTransaction(id) {
-        if (confirm("Delete this transaction?")) {
+        if (confirm("Удалить эту транзакцию?")) {
             this.tm.deleteTransaction(id);
             this.updateDashboard();
             this.updateOverviewChart();
             this.updateTransactionsTable();
-            this.showNotification("Transaction deleted", "info");
+            this.showNotification("Транзакция удалена", "info");
         }
     }
 
     clearAllData() {
-        if (confirm("Are you sure you want to delete ALL transactions?")) {
+        if (confirm("Вы уверены, что хотите удалить ВСЕ транзакции?")) {
             this.tm.clearAll();
             this.updateDashboard();
             this.updateOverviewChart();
             this.updateTransactionsTable();
-            this.showNotification("All data cleared", "info");
+            this.showNotification("Все данные очищены", "info");
         }
     }
 
-    // ===== МЕТОДЫ ДЛЯ ОБНОВЛЕНИЯ ИНТЕРФЕЙСА =====
     updateDashboard() {
         const currentStats = this.tm.getCurrentMonthStats();
         const lastStats = this.tm.getLastMonthStats();
@@ -663,12 +694,10 @@ class UIManager {
         const currentMonth = currentDate.getMonth();
         const currentYear = currentDate.getFullYear();
 
-        // Обновление основных сумм
-        this._updateElement(".income-amount", `$${currentStats.income.toFixed(2)}`);
-        this._updateElement(".expense-amount", `$${currentStats.expenses.toFixed(2)}`);
-        this._updateElement(".total-expenses", `$${currentStats.expenses.toFixed(2)}`);
+        this._updateElement(".income-amount", `${currentStats.income.toFixed(2)} ₽`);
+        this._updateElement(".expense-amount", `${currentStats.expenses.toFixed(2)} ₽`);
+        this._updateElement(".total-expenses", `${currentStats.expenses.toFixed(2)} ₽`);
 
-        // Расчет и обновление процентов для доходов
         this._updatePercentage(
             '.card:first-child .change',
             currentStats.income,
@@ -676,7 +705,6 @@ class UIManager {
             true
         );
 
-        // Расчет и обновление процентов для расходов
         this._updatePercentage(
             '.card:nth-child(2) .change',
             currentStats.expenses,
@@ -684,20 +712,18 @@ class UIManager {
             false
         );
 
-        // Обновление категорий
-        this._updateElement(".category-amount-food", `$${currentStats.categoryTotals.food.toFixed(2)}`);
-        this._updateElement(".category-amount-entertainment", `$${currentStats.categoryTotals.entertainment.toFixed(2)}`);
-        this._updateElement(".category-amount-shopping", `$${currentStats.categoryTotals.shopping.toFixed(2)}`);
-        this._updateElement(".category-amount-investment", `$${currentStats.categoryTotals.investment.toFixed(2)}`);
-        this._updateElement(".category-amount-other", `$${currentStats.categoryTotals.other.toFixed(2)}`);
+        this._updateElement(".category-amount-food", `${currentStats.categoryTotals.food.toFixed(2)} ₽`);
+        this._updateElement(".category-amount-entertainment", `${currentStats.categoryTotals.entertainment.toFixed(2)} ₽`);
+        this._updateElement(".category-amount-shopping", `${currentStats.categoryTotals.shopping.toFixed(2)} ₽`);
+        this._updateElement(".category-amount-investment", `${currentStats.categoryTotals.investment.toFixed(2)} ₽`);
+        this._updateElement(".category-amount-other", `${currentStats.categoryTotals.other.toFixed(2)} ₽`);
 
-        // Обновление периода
         const periodValues = document.querySelectorAll(".period-values span");
         if (periodValues.length >= 3) {
             const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-            periodValues[0].textContent = `$${Math.round(currentStats.expenses / daysInMonth) || 0}`;
-            periodValues[1].textContent = `$${Math.round(currentStats.expenses / 4) || 0}`;
-            periodValues[2].textContent = `$${currentStats.expenses.toFixed(2)}`;
+            periodValues[0].textContent = `${Math.round(currentStats.expenses / daysInMonth) || 0} ₽`;
+            periodValues[1].textContent = `${Math.round(currentStats.expenses / 4) || 0} ₽`;
+            periodValues[2].textContent = `${currentStats.expenses.toFixed(2)} ₽`;
         }
     }
 
@@ -730,7 +756,7 @@ class UIManager {
 
         element.innerHTML = `
             <i class="fas ${icon}" style="color: ${color}"></i>
-            <span style="color: ${color}">${percent}% vs Last month</span>
+            <span style="color: ${color}">${percent}% против прошлого месяца</span>
         `;
     }
 
@@ -823,9 +849,9 @@ class UIManager {
 
         if (sortedTransactions.length === 0) {
             const row = document.createElement("tr");
-            let message = "No transactions match your filters.";
+            let message = "Нет транзакций, соответствующих вашим фильтрам.";
             if (this.tm.transactions.length === 0) {
-                message = "No transactions yet. Click + or - to add your first transaction!";
+                message = "Пока нет транзакций. Нажмите + или - чтобы добавить первую транзакцию!";
             }
             row.innerHTML = `<td colspan="6" style="text-align: center; padding: 2rem; color: #6b7280;">${message}</td>`;
             tbody.appendChild(row);
@@ -836,15 +862,15 @@ class UIManager {
 
         recentTransactions.forEach(transaction => {
             const row = document.createElement("tr");
-            const formattedDate = new Date(transaction.date).toLocaleDateString("en-US", {
+            const formattedDate = new Date(transaction.date).toLocaleDateString("ru-RU", {
                 month: "short",
                 day: "numeric",
                 year: "numeric",
             });
 
             const amountDisplay = transaction.isIncome()
-                ? `+$${transaction.amount.toFixed(2)}`
-                : `-$${transaction.getAbsoluteAmount().toFixed(2)}`;
+                ? `+${transaction.amount.toFixed(2)} ₽`
+                : `-${transaction.getAbsoluteAmount().toFixed(2)} ₽`;
 
             row.innerHTML = `
                 <td>${formattedDate}</td>
@@ -853,10 +879,10 @@ class UIManager {
                 <td style="color: ${transaction.isIncome() ? "#10b981" : "#ef4444"}">${amountDisplay}</td>
                 <td><span class="status-success">${transaction.status}</span></td>
                 <td>
-                    <button class="action-btn" onclick="app.uiManager.openEditModal(${transaction.id})" style="margin-right: 5px;" title="Edit">
+                    <button class="action-btn" onclick="app.uiManager.openEditModal(${transaction.id})" style="margin-right: 5px;" title="Редактировать">
                         <i class="fas fa-edit"></i>
                     </button>
-                    <button class="action-btn" onclick="app.uiManager.deleteTransaction(${transaction.id})" title="Delete">
+                    <button class="action-btn" onclick="app.uiManager.deleteTransaction(${transaction.id})" title="Удалить">
                         <i class="fas fa-trash"></i>
                     </button>
                 </td>
@@ -890,19 +916,19 @@ class UIManager {
         if (this.currentFilter.type !== 'all' || 
             this.currentFilter.category !== 'all' || 
             this.currentFilter.search) {
-            let filterText = 'Active filters: ';
+            let filterText = 'Активные фильтры: ';
             const filters = [];
             if (this.currentFilter.type !== 'all') {
-                filters.push(`Type: ${this.currentFilter.type === 'income' ? 'Income' : 'Expenses'}`);
+                filters.push(`Тип: ${this.currentFilter.type === 'income' ? 'Доходы' : 'Расходы'}`);
             }
             if (this.currentFilter.category !== 'all') {
-                filters.push(`Category: ${this.currentFilter.category}`);
+                filters.push(`Категория: ${this.currentFilter.category}`);
             }
             if (this.currentFilter.search) {
-                filters.push(`Search: "${this.currentFilter.search}"`);
+                filters.push(`Поиск: "${this.currentFilter.search}"`);
             }
             filterText += filters.join(', ');
-            filterText += ` (showing ${filteredCount} of ${this.tm.transactions.length} transactions)`;
+            filterText += ` (показано ${filteredCount} из ${this.tm.transactions.length} транзакций)`;
             filterInfo.textContent = filterText;
             filterInfo.style.display = 'block';
         } else {
@@ -910,7 +936,6 @@ class UIManager {
         }
     }
 
-    // ===== МЕТОДЫ ДЛЯ СОРТИРОВКИ И ФИЛЬТРАЦИИ =====
     applyAdvancedSort() {
         const sortType = document.getElementById('sortType').value;
         const sortDirection = document.getElementById('sortDirection').value;
@@ -930,18 +955,18 @@ class UIManager {
         this.updateSortBadge();
         document.getElementById('sortPanel').style.display = 'none';
 
-        this.showNotification(`Sorted by ${this._getSortDescription()}`, 'info');
+        this.showNotification(`Сортировка: ${this._getSortDescription()}`, 'info');
     }
 
     _getSortDescription() {
-        if (this.currentSort.column === 'date-desc') return 'newest first';
-        if (this.currentSort.column === 'date-asc') return 'oldest first';
-        if (this.currentSort.column === 'amount-desc') return 'highest amount';
-        if (this.currentSort.column === 'amount-asc') return 'lowest amount';
+        if (this.currentSort.column === 'date-desc') return 'сначала новые';
+        if (this.currentSort.column === 'date-asc') return 'сначала старые';
+        if (this.currentSort.column === 'amount-desc') return 'сначала большие суммы';
+        if (this.currentSort.column === 'amount-asc') return 'сначала малые суммы';
         if (this.currentSort.column === 'category') {
-            return this.currentSort.direction === 'asc' ? 'category A-Z' : 'category Z-A';
+            return this.currentSort.direction === 'asc' ? 'категория А-Я' : 'категория Я-А';
         }
-        return 'date';
+        return 'дате';
     }
 
     updateSortBadge() {
@@ -968,7 +993,7 @@ class UIManager {
         }
 
         let icon = 'fa-calendar';
-        if (this.currentSort.column.includes('amount')) icon = 'fa-dollar-sign';
+        if (this.currentSort.column.includes('amount')) icon = 'fa-ruble-sign';
         if (this.currentSort.column === 'category') icon = 'fa-font';
 
         let text = this._getSortDescription();
@@ -996,7 +1021,7 @@ class UIManager {
             sortBadge.remove();
         }
 
-        this.showNotification('Sort reset to default', 'info');
+        this.showNotification('Сортировка сброшена', 'info');
     }
 
     toggleSortPanel() {
@@ -1028,7 +1053,7 @@ class UIManager {
         document.getElementById('filterPanel').style.display = 'none';
 
         if (typeFilter !== 'all' || categoryFilter !== 'all' || searchFilter) {
-            this.showNotification('Filters applied', 'info');
+            this.showNotification('Фильтры применены', 'info');
         }
     }
 
@@ -1045,7 +1070,7 @@ class UIManager {
 
         this.updateTransactionsTable();
         document.getElementById('filterPanel').style.display = 'none';
-        this.showNotification('Filters reset', 'info');
+        this.showNotification('Фильтры сброшены', 'info');
     }
 
     updateFilterCategories() {
@@ -1057,11 +1082,11 @@ class UIManager {
 
         const allOption = document.createElement('option');
         allOption.value = 'all';
-        allOption.textContent = 'All Categories';
+        allOption.textContent = 'Все категории';
         categorySelect.appendChild(allOption);
 
         if (typeFilter === 'income') {
-            const incomeCategories = ['Salary', 'Freelance', 'Business', 'Investment', 'Other'];
+            const incomeCategories = ['Зарплата', 'Фриланс', 'Бизнес', 'Инвестиции', 'Другое'];
             incomeCategories.forEach(cat => {
                 const option = document.createElement('option');
                 option.value = cat.toLowerCase();
@@ -1069,19 +1094,33 @@ class UIManager {
                 categorySelect.appendChild(option);
             });
         } else if (typeFilter === 'expense') {
-            const expenseCategories = ['Food', 'Entertainment', 'Shopping', 'Transport', 'Utilities', 'Investment', 'Other'];
+            const expenseCategories = ['Еда и здоровье', 'Развлечения', 'Покупки', 'Транспорт', 'Коммунальные услуги', 'Инвестиции', 'Другое'];
             expenseCategories.forEach(cat => {
+                let value = cat.toLowerCase();
+                if (cat === 'Еда и здоровье') value = 'food';
+                if (cat === 'Развлечения') value = 'entertainment';
+                if (cat === 'Покупки') value = 'shopping';
+                if (cat === 'Транспорт') value = 'transport';
+                if (cat === 'Коммунальные услуги') value = 'utilities';
+                if (cat === 'Инвестиции') value = 'investment';
+                if (cat === 'Другое') value = 'other';
                 const option = document.createElement('option');
-                option.value = cat.toLowerCase();
-                option.textContent = cat === 'Food' ? 'Food & Health' : cat;
+                option.value = value;
+                option.textContent = cat;
                 categorySelect.appendChild(option);
             });
         } else {
-            const allCategories = ['Salary', 'Freelance', 'Business', 'Food', 'Entertainment', 'Shopping', 'Transport', 'Utilities', 'Investment', 'Other'];
+            const allCategories = ['Зарплата', 'Фриланс', 'Бизнес', 'Еда и здоровье', 'Развлечения', 'Покупки', 'Транспорт', 'Коммунальные услуги', 'Инвестиции', 'Другое'];
             allCategories.forEach(cat => {
+                let value = cat.toLowerCase();
+                if (cat === 'Еда и здоровье') value = 'food';
+                if (cat === 'Развлечения') value = 'entertainment';
+                if (cat === 'Покупки') value = 'shopping';
+                if (cat === 'Транспорт') value = 'transport';
+                if (cat === 'Коммунальные услуги') value = 'utilities';
                 const option = document.createElement('option');
-                option.value = cat.toLowerCase();
-                option.textContent = cat === 'Food' ? 'Food & Health' : cat;
+                option.value = value;
+                option.textContent = cat;
                 categorySelect.appendChild(option);
             });
         }
@@ -1091,12 +1130,10 @@ class UIManager {
         }
     }
 
-    // ===== МЕТОДЫ ДЛЯ СОЗДАНИЯ ПАНЕЛЕЙ =====
     createFilterAndSortPanels() {
         const transactionsSection = document.querySelector('.transactions-section');
         if (!transactionsSection) return;
 
-        // Панель сортировки
         const sortPanel = document.createElement('div');
         sortPanel.id = 'sortPanel';
         sortPanel.style.cssText = `
@@ -1110,35 +1147,34 @@ class UIManager {
         `;
 
         sortPanel.innerHTML = `
-            <h4 style="margin: 0 0 1rem 0; font-size: 1rem; color: #111827;">Sort Transactions</h4>
+            <h4 style="margin: 0 0 1rem 0; font-size: 1rem; color: #111827;">Сортировка транзакций</h4>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
                 <div>
-                    <label style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem; color: #374151;">Sort by</label>
+                    <label style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem; color: #374151;">Сортировать по</label>
                     <select id="sortType" class="form-select" style="width: 100%;">
-                        <option value="date">Date</option>
-                        <option value="amount">Amount</option>
-                        <option value="category">Category</option>
+                        <option value="date">Дате</option>
+                        <option value="amount">Сумме</option>
+                        <option value="category">Категории</option>
                     </select>
                 </div>
                 <div>
-                    <label style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem; color: #374151;">Order</label>
+                    <label style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem; color: #374151;">Порядок</label>
                     <select id="sortDirection" class="form-select" style="width: 100%;">
-                        <option value="newest" data-type="date">Newest first</option>
-                        <option value="oldest" data-type="date">Oldest first</option>
-                        <option value="highest" data-type="amount">Highest first</option>
-                        <option value="lowest" data-type="amount">Lowest first</option>
-                        <option value="az" data-type="category">A to Z</option>
-                        <option value="za" data-type="category">Z to A</option>
+                        <option value="newest" data-type="date">Сначала новые</option>
+                        <option value="oldest" data-type="date">Сначала старые</option>
+                        <option value="highest" data-type="amount">Сначала большие</option>
+                        <option value="lowest" data-type="amount">Сначала малые</option>
+                        <option value="az" data-type="category">От А до Я</option>
+                        <option value="za" data-type="category">От Я до А</option>
                     </select>
                 </div>
             </div>
             <div style="display: flex; gap: 0.5rem; justify-content: flex-end;">
-                <button class="btn btn-secondary" onclick="document.getElementById('sortPanel').style.display='none'">Cancel</button>
-                <button class="btn btn-primary" onclick="app.uiManager.applyAdvancedSort()">Apply Sort</button>
+                <button class="btn btn-secondary" onclick="document.getElementById('sortPanel').style.display='none'">Отмена</button>
+                <button class="btn btn-primary" onclick="app.uiManager.applyAdvancedSort()">Применить</button>
             </div>
         `;
 
-        // Панель фильтров
         const filterPanel = document.createElement('div');
         filterPanel.id = 'filterPanel';
         filterPanel.style.cssText = `
@@ -1152,30 +1188,30 @@ class UIManager {
         `;
 
         filterPanel.innerHTML = `
-            <h4 style="margin: 0 0 1rem 0; font-size: 1rem; color: #111827;">Filter Transactions</h4>
+            <h4 style="margin: 0 0 1rem 0; font-size: 1rem; color: #111827;">Фильтрация транзакций</h4>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
                 <div>
-                    <label style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem; color: #374151;">Type</label>
+                    <label style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem; color: #374151;">Тип</label>
                     <select id="filterType" class="form-select" style="width: 100%;" onchange="app.uiManager.updateFilterCategories()">
-                        <option value="all">All Transactions</option>
-                        <option value="income">Income Only</option>
-                        <option value="expense">Expenses Only</option>
+                        <option value="all">Все транзакции</option>
+                        <option value="income">Только доходы</option>
+                        <option value="expense">Только расходы</option>
                     </select>
                 </div>
                 <div>
-                    <label style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem; color: #374151;">Category</label>
+                    <label style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem; color: #374151;">Категория</label>
                     <select id="filterCategory" class="form-select" style="width: 100%;">
-                        <option value="all">All Categories</option>
+                        <option value="all">Все категории</option>
                     </select>
                 </div>
                 <div>
-                    <label style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem; color: #374151;">Search</label>
-                    <input type="text" id="filterSearch" class="form-input" placeholder="Search..." style="width: 100%;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem; color: #374151;">Поиск</label>
+                    <input type="text" id="filterSearch" class="form-input" placeholder="Поиск..." style="width: 100%;">
                 </div>
             </div>
             <div style="display: flex; gap: 0.5rem; justify-content: flex-end;">
-                <button class="btn btn-secondary" onclick="app.uiManager.resetFilters()">Reset</button>
-                <button class="btn btn-primary" onclick="app.uiManager.applyFilters()">Apply Filters</button>
+                <button class="btn btn-secondary" onclick="app.uiManager.resetFilters()">Сбросить</button>
+                <button class="btn btn-primary" onclick="app.uiManager.applyFilters()">Применить</button>
             </div>
         `;
 
@@ -1211,12 +1247,11 @@ class UIManager {
 
         const sortBtn = document.querySelector('.filters .filter-btn:first-child');
         if (sortBtn) {
-            sortBtn.innerHTML = '<i class="fas fa-sort"></i> Sort';
+            sortBtn.innerHTML = '<i class="fas fa-sort"></i> Сортировка';
             sortBtn.onclick = this.toggleSortPanel.bind(this);
         }
     }
 
-    // ===== МЕТОДЫ ДЛЯ ЭКСПОРТА =====
     exportTransactions() {
         const dataStr = JSON.stringify(this.tm.transactions.map(t => t.toJSON()), null, 2);
         const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
@@ -1228,10 +1263,9 @@ class UIManager {
         linkElement.setAttribute('download', exportFileDefaultName);
         linkElement.click();
 
-        this.showNotification('Transactions exported successfully!', 'success');
+        this.showNotification('Транзакции успешно экспортированы!', 'success');
     }
 
-    // ===== МЕТОДЫ ДЛЯ УВЕДОМЛЕНИЙ =====
     showNotification(message, type = "success") {
         const notification = document.createElement("div");
         notification.style.cssText = `
@@ -1288,20 +1322,15 @@ class FinanceApp {
         this.uiManager = new UIManager(this.transactionManager);
         this.exchangeAPI = new ExchangeRateAPI();
         
-        // Делаем приложение глобально доступным для onclick-обработчиков
         window.app = this;
     }
 
     async init() {
-        // Инициализация UI
         this.uiManager.init();
         
-        // Пример интеграции с API - получение курса валют
         try {
             const rate = await this.exchangeAPI.getRate('USD', 'EUR');
             console.log('Current USD to EUR rate:', rate);
-            
-            // Можно добавить отображение курса в интерфейсе
             this._displayExchangeRate(rate);
         } catch (error) {
             console.warn('Could not fetch exchange rates');
@@ -1309,7 +1338,6 @@ class FinanceApp {
     }
 
     _displayExchangeRate(rate) {
-        // Добавляем информацию о курсе валют в интерфейс
         const headerControls = document.querySelector('.header-controls');
         if (headerControls) {
             const rateElement = document.createElement('div');
@@ -1327,9 +1355,6 @@ class FinanceApp {
     }
 }
 
-// ============================================
-// ЗАПУСК ПРИЛОЖЕНИЯ
-// ============================================
 document.addEventListener("DOMContentLoaded", () => {
     const app = new FinanceApp();
     app.init();
